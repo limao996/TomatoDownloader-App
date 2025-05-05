@@ -20,13 +20,15 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import java.io.File
 
+var bookId by mutableStateOf("")
+
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
         Scaffold(topBar = {
             if (!isDesktop()) TopAppBar(title = {
-                Text(text = "番茄下载器")
+                Text(text = "番茄小说下载器")
             }, backgroundColor = MaterialTheme.colors.surface, elevation = 6.dp)
         }) {
             Surface(
@@ -38,7 +40,6 @@ fun App() {
                     verticalArrangement = Arrangement.Center
                     //verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    var bookId by remember { mutableStateOf("") }
                     var isEpub by remember { mutableStateOf(false) }
                     var state by remember { mutableIntStateOf(0) }
                     var msg by remember { mutableStateOf("准备就绪") }

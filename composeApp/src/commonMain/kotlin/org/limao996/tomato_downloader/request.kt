@@ -1,3 +1,4 @@
+import UserAgentGenerator.randomUserAgent
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.*
@@ -6,16 +7,10 @@ import org.jsoup.Jsoup
 import java.io.IOException
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
-private const val cookieData = "novel_web_id=3960666597597448470"
 
 object RequestHandler {
-    val userAgents = mutableListOf(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0"
-    )
 
     val client = OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).writeTimeout(10, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS).cookieJar(object : CookieJar {
@@ -31,11 +26,10 @@ object RequestHandler {
         }).build()
 
     fun getHeaders(): Headers {
-        val randomUserAgent = userAgents.random()
         val headers = mutableMapOf(
-            "User-Agent" to randomUserAgent
+            "User-Agent" to randomUserAgent(false)
         )
-        headers["Cookie"] = cookieData
+        headers["Cookie"] = "novel_web_id=" + Random.nextLong(1000000000000000000L, 3960666597597448470L)
         return headers.toHeaders()
     }
 

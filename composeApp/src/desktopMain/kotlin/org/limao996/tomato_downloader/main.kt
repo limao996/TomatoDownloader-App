@@ -6,7 +6,7 @@ import androidx.compose.ui.window.application
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "番茄下载器",
+        title = "番茄小说下载器",
     ) {
         App()
     }
