@@ -38,7 +38,7 @@ kotlin {
             }
             implementation(libs.okhttp)
             implementation(libs.jsoup)
-            implementation(libs.gson)
+            implementation(libs.fastjson2.kotlin)
             implementation(libs.jetbrains.kotlinx.coroutines.core)
 
             implementation(compose.runtime)
@@ -66,7 +66,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 2
-        versionName = "1.0.1"
+        versionName = "1.1.0"
     }
     packaging {
         resources {
@@ -95,7 +95,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Msi)
             packageName = "番茄小说下载器"
-            packageVersion = "1.0.1"
+            packageVersion = "1.1.0"
         }
     }
 }

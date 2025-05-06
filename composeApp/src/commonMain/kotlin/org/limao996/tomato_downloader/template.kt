@@ -10,7 +10,7 @@ fun escapeHtml(html: String): String {
     return buffer.toString()
 }
 
-fun makeContentHtml(title: String, content: String): String {
+fun makeContentHtml(title: String, data: TomatoChapterDownloader.ChapterData): String {
     val title = escapeHtml(title)
     return """<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE html>
@@ -20,7 +20,8 @@ fun makeContentHtml(title: String, content: String): String {
     </head>
     <body>
         <h2>$title</h2>
-        ${escapeHtml(content)}
+        <p><small>本章字数：${data.wordCount}字  更新时间：${data.lastUpdateDate}</small></p>
+        ${escapeHtml(data.content)}
     </body>
 </html>""".trimIndent()
 }

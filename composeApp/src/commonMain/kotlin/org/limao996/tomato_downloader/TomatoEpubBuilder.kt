@@ -1,4 +1,3 @@
-import RequestHandler.client
 import RequestHandler.getHeaders
 import io.documentnode.epub4j.domain.Author
 import io.documentnode.epub4j.domain.Book
@@ -54,17 +53,18 @@ class TomatoEpubBuilder(override val book: TomatoBook) : TomatoBuilder() {
             }
         }
 
-        onBuild("添加下载任务", 0f)
-        val jobs = mutableListOf<Deferred<Pair<String, String>>>()
-        for (chapter in chapters) {
-            jobs.add(async { chapter.title to chapter.content })
+        onBuild("添加下载任务 (0 / ${book.chapterCount!!})", 0f)
+        val jobs = mutableListOf<Deferred<Pair<String, TomatoChapterDownloader.ChapterData>>>()
+        for ((index, chapter) in chapters.withIndex()) {
+            jobs.add(async { chapter.title to chapter.data })
+            onBuild("添加下载任务 (${index + 1} / ${book.chapterCount!!})", 0f)
         }
 
         onBuild("写入章节内容", 0f)
         for ((index, job) in jobs.withIndex()) {
-            val (title, content) = job.await()
+            val (title, data) = job.await()
             epub.addSection(
-                title, Resource(makeContentHtml(title, content).byteInputStream(), "chapter${index + 1}.xhtml")
+                title, Resource(makeContentHtml(title, data).byteInputStream(), "chapter${index + 1}.xhtml")
             )
             onBuild("写入章节内容 (${index + 1} / ${book.chapterCount!!})", (index + 1f) / book.chapterCount!!)
         }

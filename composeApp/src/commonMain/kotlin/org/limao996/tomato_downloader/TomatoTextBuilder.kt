@@ -17,10 +17,13 @@ class TomatoTextBuilder(override val book: TomatoBook) : TomatoBuilder() {
         // 写入书籍信息
         bw.write("书名：${book.name}\n" + "作者：${book.author}\n\n" + "简介：\n${book.description}\n\n\n")
 
-        onBuild("添加下载任务", 0f)
+        val chapters = book.list()
+        onBuild("添加下载任务 (0/${book.chapterCount!!})", 0f)
         val jobs = mutableListOf<Deferred<String>>()
-        for (chapter in book.list()) {
-            jobs.add(async { "正文 ${chapter.title}\n\n${chapter.content}\n\n\n" })
+        for ((index, chapter) in chapters.withIndex()) {
+            val title = if (chapter.title.startsWith("第")) chapter.title else "正文 " + chapter.title
+            jobs.add(async { "$title\n\n${chapter.data.content}\n\n\n" })
+            onBuild("添加下载任务 (${index + 1} / ${book.chapterCount!!})", 0f)
         }
 
         onBuild("写入章节内容", 0f)

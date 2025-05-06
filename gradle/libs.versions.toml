@@ -1,7 +1,7 @@
 [versions]
-agp = "8.5.2"
+agp = "8.9.2"
 android-compileSdk = "35"
-android-minSdk = "21"
+android-minSdk = "26"
 android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
 androidx-appcompat = "1.7.0"
@@ -12,6 +12,7 @@ androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 compose-multiplatform = "1.7.3"
+fastjson2Kotlin = "2.0.57"
 filekitCore = "0.10.0-beta03"
 gson = "2.11.0"
 jsoup = "1.20.1"
@@ -23,6 +24,7 @@ mpfilepicker = "3.1.0"
 okhttp = "4.12.0"
 
 [libraries]
+fastjson2-kotlin = { module = "com.alibaba.fastjson2:fastjson2-kotlin", version.ref = "fastjson2Kotlin" }
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekitCore" }
 filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekitCore" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
