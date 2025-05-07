@@ -1,10 +1,12 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package org.limao996.tomato_downloader
 
 import TomatoBook
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,23 +32,25 @@ fun App() {
         Scaffold(topBar = {
             if (!isDesktop()) TopAppBar(title = {
                 Text(text = "番茄小说下载器")
-            }, backgroundColor = MaterialTheme.colors.surface, elevation = 6.dp)
+            })
         }) {
             Surface(
-                Modifier.fillMaxSize().padding(it).safeContentPadding().safeGesturesPadding(),
+                Modifier.fillMaxSize().padding(it),
             ) {
                 Column(
                     Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(vertical = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
-                    //verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     var isEpub by remember { mutableStateOf(false) }
                     var state by remember { mutableIntStateOf(0) }
                     var msg by remember { mutableStateOf("准备就绪") }
                     var file by remember { mutableStateOf<File?>(null) }
-
-                    TextField(bookId, enabled = state == 0, label = { Text("书籍id") }, onValueChange = { bookId = it })
+                    OutlinedTextField(
+                        bookId,
+                        enabled = state == 0,
+                        label = { Text("书籍id") },
+                        onValueChange = { bookId = it })
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically,
