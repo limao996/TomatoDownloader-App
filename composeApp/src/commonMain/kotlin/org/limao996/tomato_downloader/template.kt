@@ -10,24 +10,33 @@ fun escapeHtml(html: String): String {
     return buffer.toString()
 }
 
-fun makeContentHtml(title: String, data: TomatoChapterDownloader.ChapterData): String {
+fun makeContentHtml(title: String, data: ChapterData): String {
     val title = escapeHtml(title)
+    val header = mutableListOf<String>()
+    data.wordCount?.let {
+        header.add("本章字数：$it")
+    }
+    data.lastUpdateDate?.let {
+        header.add("更新时间：$it")
+    }
+    val headerFormat = if (header.isNotEmpty()) "<p><small>${header.joinToString("    ")}</small></p>" else ""
+
     return """<?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" lang="zh-CN" xml:lang="zh-CN">
     <head>
         <title>$title</title>
     </head>
     <body>
         <h2>$title</h2>
-        <p><small>本章字数：${data.wordCount}字  更新时间：${data.lastUpdateDate}</small></p>
+        $headerFormat
         ${escapeHtml(data.content)}
     </body>
 </html>""".trimIndent()
 }
 
 fun makeCoverHtml(name: String, author: String) = """<?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" lang="zh-CN" xml:lang="zh-CN">
   <head>
     <title>封面</title>
@@ -53,7 +62,7 @@ fun makeNavHtml(nav: List<String>): ByteArrayInputStream {
         )
     }
     return """<?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="zh-CN" xml:lang="zh-CN">
   <head>
     <title>目录</title>
@@ -77,7 +86,7 @@ fun makeNavHtml(nav: List<String>): ByteArrayInputStream {
 
 
 fun makeIntroHtml(name: String, author: String, description: String) = """<?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" lang="zh-CN" xml:lang="zh-CN">
   <head>
     <title>简介</title>

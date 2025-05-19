@@ -64,8 +64,8 @@ android {
         applicationId = "org.limao996.tomato_downloader"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.2.0"
     }
     packaging {
         resources {
@@ -94,7 +94,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Msi)
             packageName = "番茄小说下载器"
-            packageVersion = "1.1.0"
+            packageVersion = "1.2.0"
         }
     }
 }

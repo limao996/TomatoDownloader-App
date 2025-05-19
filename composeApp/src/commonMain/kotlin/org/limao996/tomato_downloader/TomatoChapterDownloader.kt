@@ -16,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-private class TomatoCrypto(key: String) {
+private class Crypto(key: String) {
     private val key: ByteArray
     private val cipherMode = "AES/CBC/PKCS5Padding"
 
@@ -74,7 +74,7 @@ private fun Map<String, String>.toQueryString(): String {
 }
 
 
-class TomatoChapterDownloader(val chapterId: String) {
+class OldTomatoChapterDownloader(val chapterId: String) {
     private val config = object {
         val installId = "4427064614339001"
         val serverDeviceId = "4427064614334905"
@@ -124,7 +124,7 @@ class TomatoChapterDownloader(val chapterId: String) {
     private fun getRegisterKey(): String {
         val url = "https://api5-normal-sinfonlineb.fqnovel.com/reading/crypt/registerkey"
         val params = mapOf("aid" to config.aid)
-        val crypto = TomatoCrypto("ac25c67ddd8f38c1b37a2348828e222e")
+        val crypto = Crypto("ac25c67ddd8f38c1b37a2348828e222e")
 
         val payload = mapOf(
             "content" to crypto.newRegisterKeyContent(config.serverDeviceId, "0"), "keyver" to 1
@@ -144,7 +144,7 @@ class TomatoChapterDownloader(val chapterId: String) {
     @OptIn(ExperimentalEncodingApi::class)
     private fun decryptContent(encryptContent: String): String {
         val key = getRegisterKey()
-        val crypto = TomatoCrypto(key)
+        val crypto = Crypto(key)
         val byteContent = crypto.decrypt(Base64.decode(encryptContent))
         return GZIPInputStream(ByteArrayInputStream(byteContent)).use {
             it.readBytes().toString(Charsets.UTF_8)
@@ -179,8 +179,23 @@ class TomatoChapterDownloader(val chapterId: String) {
         )
     }
 
-    data class ChapterData(
-        val content: String, val wordCount: String, val lastUpdateDate: String
-    )
-
 }
+
+class TomatoChapterDownloader(val chapterId: String) {
+    val url = "https://fanqie.tutuxka.top/?item_ids="
+    fun downloadChapter(): ChapterData {
+        val request = Request.Builder().url("$url$chapterId").header("User-Agent", randomUserAgent(false)).get().build()
+
+        val response = client.newCall(request).execute()
+        if (!response.isSuccessful) {
+            throw IOException("请求失败: ${response.code}")
+        }
+        val body = response.body!!.string()
+        val content = JSONPath.extract(body, "data.content") as String
+        return ChapterData(content.substringAfter("\n"))
+    }
+}
+
+data class ChapterData(
+    val content: String, val wordCount: String? = null, val lastUpdateDate: String? = null
+)

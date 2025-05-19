@@ -29,3 +29,13 @@ actual fun shareFile(file: File) {
     intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION)
     activity.startActivity(createChooser(intent, "分享文件"))
 }
+
+actual fun createFile(
+    prefix: String, suffix: String
+): File {
+    val dataDir = getDataDir()
+    dataDir.listFiles()?.forEach {
+        it.delete()
+    }
+    return File(dataDir, prefix + suffix).apply { createNewFile() }
+}

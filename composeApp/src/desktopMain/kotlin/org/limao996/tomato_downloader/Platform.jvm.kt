@@ -14,3 +14,7 @@ actual fun log(vararg msg: Any?) {
 }
 
 actual fun shareFile(file: File): Unit = TODO("Not yet implemented")
+
+actual fun createFile(
+    prefix: String, suffix: String
+) = File.createTempFile(prefix, suffix)

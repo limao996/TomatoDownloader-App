@@ -27,7 +27,6 @@ var bookId by mutableStateOf("")
 @Composable
 @Preview
 fun App() {
-    val dataDir = getDataDir()
     MaterialTheme {
         Scaffold(topBar = {
             if (!isDesktop()) TopAppBar(title = {
@@ -70,20 +69,15 @@ fun App() {
                         GlobalScope.launch(Dispatchers.IO) {
                             try {
                                 val book = TomatoBook(bookId)
-                                dataDir.deleteRecursively()
-                                dataDir.mkdirs()
-                                dataDir.setWritable(true)
-                                val _file = File(dataDir, book.name + (if (isEpub) ".epub" else ".txt"))
-                                _file.createNewFile()
-                                _file.setWritable(true)
+                                val _file = createFile(book.name, (if (isEpub) ".epub" else ".txt"))
 
                                 launch {
                                     buildTomatoBook(
                                         book = book,
                                         file = _file,
                                         isEpub = isEpub,
-                                    ) { s, p ->// 提示和进度
-                                        msg = "$s: ${(p * 100).toInt()}%"
+                                    ) {
+                                        msg = it
                                     }
                                 }.join()
                                 file = _file

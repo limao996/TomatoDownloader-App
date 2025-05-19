@@ -6,8 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.init
 
@@ -24,7 +22,7 @@ class MainActivity : ComponentActivity() {
     private fun handleSendText(intent: Intent) {
         val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
         if (sharedText != null) {
-            bookId = Regex("book_id=(\\d+)").find(sharedText)?.groupValues?.get(1) ?: bookId
+            bookId = Regex("\\d{19}").find(sharedText)?.groupValues?.getOrNull(0) ?: bookId
         }
     }
 
@@ -44,10 +42,4 @@ class MainActivity : ComponentActivity() {
             App()
         }
     }
-}
-
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
 }
